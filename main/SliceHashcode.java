@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package main;
 
 import java.io.File;
 import java.io.FileReader;
@@ -30,7 +31,6 @@ public class SliceHashcode {
             System.out.println("Couldn't create outputs folder");
             System.exit(3);
         }
-        ;
 
         List<String> inputfiles = new ArrayList<>();
         File folder = new File("inputs");
@@ -68,18 +68,21 @@ public class SliceHashcode {
         }
 
         int total = 0;
-        int tmp = 0;
+        int val = 0;
+
         int index = 0;
         int[] pizzaTypes = new int[maxAndNo[1]];
-        for (int i = slice.length - 1; i >= 0; i--) {
-            tmp = total + slice[i];
-            if (tmp <= maxAndNo[0]) {
-                total = tmp;
-                pizzaTypes[++index] = i;
+
+        for (int key = slice.length - 1; key >= 0; key--) {
+            val = slice[key];
+            if ((total + val) <= maxAndNo[0]) {
+                total += val;
+                pizzaTypes[index++] = key;
             }
         }
+        System.out.println("Index:" + index);
         int[] finaltype = new int[index];
-        for (int i=0;i<index;i++) {
+        for (int i = 0; i < index; i++) {
             finaltype[i] = pizzaTypes[i];
         }
         Arrays.sort(finaltype);
@@ -94,7 +97,7 @@ public class SliceHashcode {
                 FileWriter writer = new FileWriter(file);
                 String content = types.length + "\n";
                 for (int i : types) {
-                    content += (i+" ");
+                    content += (i + " ");
                 }
                 writer.write(content);
                 writer.close();
