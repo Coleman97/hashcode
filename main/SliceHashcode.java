@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Tobicole
  */
-public class Hashcode {
+public class SliceHashcode {
 
     /**
      * @param args the command line arguments
@@ -25,33 +25,34 @@ public class Hashcode {
     public static void main(final String[] args) throws IOException {
         String[] info = { "", "" };
 
-        // OutputDirectory
-        File directory =  new File("SliceOutput");
-        if(!directory.mkdir()){
-            System.out.println("Cannot create folder");
-        };
+        File directory = new File("outputs");
+        if (!directory.mkdir()) {
+            System.out.println("Couldn't create outputs folder");
+            System.exit(3);
+        }
+        ;
 
         List<String> inputfiles = new ArrayList<>();
-        File folder = new File("SliceInput");
+        File folder = new File("inputs");
         for (File f : folder.listFiles()) {
             inputfiles.add(f.getName());
         }
 
         LineNumberReader lineReader;
         for (String path : inputfiles) {
-            lineReader = new LineNumberReader(new FileReader("./SliceInput\\" + path));
+            lineReader = new LineNumberReader(new FileReader("./inputs\\" + path));
             int i = 0;
             while ((lineReader.ready())) {
                 info[i] = lineReader.readLine();
                 i++;
             }
-            simulate(info,path);
+            simulate(info, path);
             lineReader.close();
         }
     }
 
     // Read a single input file by line and place in an array
-    static void simulate(String[] info,String path) {
+    static void simulate(String[] info, String path) {
         int[] maxAndNo = { 0, 0, 0 };
         int j = 0;
         // String[] ff = Uti
@@ -78,27 +79,22 @@ public class Hashcode {
             }
         }
         int[] finaltype = new int[index];
-        for(int i=0; i<index; i++){
+        for (int i=0;i<index;i++) {
             finaltype[i] = pizzaTypes[i];
         }
         Arrays.sort(finaltype);
         printToFile(finaltype, path, total);
     }
 
-    static void createFolder(final String theFilePath) {
-        File directory = new File(theFilePath);
-        directory.mkdir();
-    }
-
     static void printToFile(int[] types, String filename, int total) {
         filename = filename.replaceAll("in", "out");
         try {
-            File file = new File("./SliceOutput\\" + filename);
+            File file = new File("./outputs\\" + filename);
             if (file.createNewFile()) {
                 FileWriter writer = new FileWriter(file);
                 String content = types.length + "\n";
-                for(int i : types){
-                    content +=(i+" ");
+                for (int i : types) {
+                    content += (i+" ");
                 }
                 writer.write(content);
                 writer.close();
